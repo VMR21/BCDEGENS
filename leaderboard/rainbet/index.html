@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="/css/style.css" />
 
     <style>
-      /* Your existing style here; shortened for brevity */
+      /* Your existing styles abbreviated */
       .leaderboard-logo {
           height: 100px;
       }
@@ -41,10 +41,12 @@
         padding: 20px;
         border-radius: 10px;
         width: 90%;
-        max-width: 600px;
+        max-width: 900px !important;
+        min-width: 340px;
         color: white;
         box-shadow: 0 0 15px rgba(73,144,226,0.8);
         font-family: Arial, sans-serif;
+        overflow-x: auto;
       }
 
       .close-btn {
@@ -53,6 +55,8 @@
         font-size: 28px;
         font-weight: bold;
         cursor: pointer;
+        position: relative;
+        z-index: 2;
       }
 
       .close-btn:hover {
@@ -68,21 +72,62 @@
         display: flex;
         justify-content: space-evenly;
         margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+        gap: 1rem;
       }
 
-      .modal-leaderboard-top3 > div {
+      .modal-leaderboard-top3 > div,
+      .top-winners .winner-card {
         flex: 1;
-        margin: 0 5px;
-        font-size: 1.1rem;
-        border-radius: 15px;
-        background: #333;
-        padding: 1rem;
+        min-width: 200px;
+        max-width: 240px;
+        background: rgba(35,37,60,0.85);
+        box-shadow: 0 4px 32px 6px #0005;
+        border-radius: 18px;
+        padding: 2rem 1.2rem 1.2rem 1.2rem;
+        margin: 0 .2rem;
         text-align: center;
+      }
+
+      .top-winners .place-badge {
+        display: inline-block;
+        background: var(--primary-blue, #4687e6);
+        color: #fff;
+        font-weight: bold;
+        border-radius: 1.2em;
+        padding: 0.2em 0.8em;
+        font-size: 1.2em;
+        margin-bottom: 0.4em;
+      }
+
+      .winner-card .username {
+        font-size: 1.3em;
+        font-weight: bold;
+        letter-spacing: 1px;
+        margin: 0.7em 0 0.3em 0;
+      }
+
+      .winner-card .stats {
+        margin-top: 0.5em;
+      }
+
+      .winner-card .stats .label {
+        font-size: 0.93em;
+        color: #bac8e4;
+      }
+
+      .winner-card .stats .value {
+        display: block;
+        font-weight: bold;
+        color: #fff;
+        font-size: 1.1em;
+        margin-bottom: .5em;
       }
 
       .modal-leaderboard-table {
         width: 100%;
         border-collapse: collapse;
+        margin-top: 1rem;
       }
 
       .modal-leaderboard-table th,
@@ -237,7 +282,7 @@
           <div class="floating-images"></div> <!-- hidden in modal -->
           <div class="winner-card silver">
             <div class="place-badge">2</div>
-            <div class="medal"><img src="/assets/silver.png" alt="silver medal" /></div>
+            <div class="medal"><img src="/assets/silver.png" alt="silver medal" style="max-width:70px;"></div>
             <h3 class="username" id="prev-winner-2-name"></h3>
             <div class="stats">
               <div class="wagered"><span class="label">Wagered</span><span class="value" id="prev-winner-2-wager"></span></div>
@@ -247,7 +292,7 @@
 
           <div class="winner-card gold">
             <div class="place-badge">1</div>
-            <div class="medal"><img src="/assets/gold.png" alt="gold medal" /></div>
+            <div class="medal"><img src="/assets/gold.png" alt="gold medal" style="max-width:84px;"></div>
             <h3 class="username" id="prev-winner-1-name"></h3>
             <div class="stats">
               <div class="wagered"><span class="label">Wagered</span><span class="value" id="prev-winner-1-wager"></span></div>
@@ -257,7 +302,7 @@
 
           <div class="winner-card bronze">
             <div class="place-badge">3</div>
-            <div class="medal"><img src="/assets/bronze.png" alt="bronze medal" /></div>
+            <div class="medal"><img src="/assets/bronze.png" alt="bronze medal" style="max-width:70px;"></div>
             <h3 class="username" id="prev-winner-3-name"></h3>
             <div class="stats">
               <div class="wagered"><span class="label">Wagered</span><span class="value" id="prev-winner-3-wager"></span></div>
@@ -304,11 +349,12 @@
     </footer>
 
     <script>
-      // Mobile menu functionality (existing)
+      // Mobile menu functionality
       const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
       const closeMenuBtn = document.querySelector('.close-menu');
       const mobileMenu = document.querySelector('.mobile-menu');
       const mobileMenuLinks = document.querySelectorAll('.mobile-menu .nav-link');
+
       mobileMenuBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         mobileMenu.classList.add('active');
@@ -333,7 +379,7 @@
         }
       });
 
-      // Countdown update functionality (existing)
+      // Countdown update functionality
       function updateCountdown(endTime) {
         const countDownDate = endTime;
         const x = setInterval(function () {
@@ -353,16 +399,14 @@
           }
         }, 1000);
       }
-      // Fetch current leaderboard and countdown data
+
       async function fetchLeaderboardData() {
         try {
           const [leaderboardResponse, countdownResponse] = await Promise.all([
             fetch('https://bcdegensdata.onrender.com/api/leaderboard/rainbet'),
             fetch('https://bcdegensdata.onrender.com/api/countdown/rainbet')
           ]);
-          if (!leaderboardResponse.ok || !countdownResponse.ok) {
-            throw new Error('Network response was not ok');
-          }
+          if (!leaderboardResponse.ok || !countdownResponse.ok) throw new Error('Network response was not ok');
           const leaderboardData = await leaderboardResponse.json();
           const countdownData = await countdownResponse.json();
           return {
@@ -377,13 +421,12 @@
           return null;
         }
       }
-      // Update the leaderboard display
+
       function updateLeaderboard(leaderboardData, prizes) {
         function findPrize(pos) {
           const prizeObj = prizes.find(p => p.position === pos);
           return prizeObj ? prizeObj.reward : '-';
         }
-        // Top 3
         for(let i=0; i<3; i++) {
           const player = leaderboardData[i];
           const prize = findPrize(i+1);
@@ -393,7 +436,6 @@
             document.getElementById(`winner-${i+1}-prize`).textContent = `$${prize}`;
           }
         }
-        // Table 4-10
         const tbody = document.querySelector('.leaderboard-table tbody');
         tbody.innerHTML = '';
         for(let i=3; i<10; i++){
@@ -406,7 +448,7 @@
           }
         }
       }
-      // Initialize and update periodically
+
       async function initializeAndUpdate() {
         const data = await fetchLeaderboardData();
         if(data){
@@ -422,7 +464,7 @@
           }
         }, 60000);
       }
-      // Previous leaderboard modal functionality
+
       document.addEventListener('DOMContentLoaded', () => {
         initializeAndUpdate();
 
@@ -443,7 +485,6 @@
             const data = await res.json();
             const leaderboard = data.leaderboard || [];
 
-            // Top 3
             for(let i=0; i<3; i++){
               const ply = leaderboard[i] || {};
               document.getElementById(`prev-winner-${i+1}-name`).textContent = ply.name || '-';
@@ -452,7 +493,6 @@
               document.getElementById(`prev-winner-${i+1}-prize`).textContent = findPrizeByPosition(i+1);
             }
 
-            // Table body
             const tbody = document.getElementById('prevLeaderboardTableBody');
             tbody.innerHTML = '';
             for(let i=3; i<10; i++){
