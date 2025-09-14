@@ -16,11 +16,10 @@
     <link rel="stylesheet" href="/css/style.css" />
 
     <style>
-      /* Existing styles ... (abbreviated for brevity, include your full styles here) */
+      /* Your existing style here; shortened for brevity */
       .leaderboard-logo {
           height: 100px;
       }
-      /* ... other styles ... */
 
       /* Modal Styling */
       .modal {
@@ -60,15 +59,30 @@
         color: #ddd;
       }
 
+      /* Hide floating images from modal */
+      .modal-content .floating-images {
+        display: none;
+      }
+
+      .modal-leaderboard-top3 {
+        display: flex;
+        justify-content: space-evenly;
+        margin-bottom: 1.5rem;
+      }
+
       .modal-leaderboard-top3 > div {
-        margin-bottom: 10px;
+        flex: 1;
+        margin: 0 5px;
         font-size: 1.1rem;
+        border-radius: 15px;
+        background: #333;
+        padding: 1rem;
+        text-align: center;
       }
 
       .modal-leaderboard-table {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 1rem;
       }
 
       .modal-leaderboard-table th,
@@ -80,24 +94,31 @@
         color: white;
       }
 
-      /* Button below countdown */
-      #showPrevLeaderboardBtn {
+      /* Center the Previous Leaderboard button */
+      #prevBtnContainer {
+        display: flex;
+        justify-content: center;
         margin-top: 1rem;
-        padding: 0.5rem 1rem;
+      }
+
+      #showPrevLeaderboardBtn {
+        padding: 0.5rem 1.5rem;
         background: var(--primary-blue);
         color: white;
         border: none;
-        border-radius: 8px;
+        border-radius: 15px;
         cursor: pointer;
-        min-width: 170px;
         font-weight: 600;
-        display: block;
+        min-width: 180px;
+        transition: background-color 0.3s ease;
+      }
+      #showPrevLeaderboardBtn:hover {
+        background: #3a6bb5;
       }
     </style>
 </head>
 <body>
     <header class="header">
-        <!-- Your existing header content -->
         <div class="nav-container">
             <div class="nav-left">
                 <div style="display: flex; align-items: center; gap: 1rem;">
@@ -137,28 +158,17 @@
                 </a>
             </div>
             <h2 class="bonus-title"><span style="color: var(--primary-blue)">LEADERBOARD</span></h2>
-
             <div class="countdown">
-                <div class="countdown-item">
-                    <span id="days">00</span>
-                    <label>Days</label>
-                </div>
-                <div class="countdown-item">
-                    <span id="hours">00</span>
-                    <label>Hours</label>
-                </div>
-                <div class="countdown-item">
-                    <span id="minutes">00</span>
-                    <label>Minutes</label>
-                </div>
-                <div class="countdown-item">
-                    <span id="seconds">00</span>
-                    <label>Seconds</label>
-                </div>
+                <div class="countdown-item"><span id="days">00</span><label>Days</label></div>
+                <div class="countdown-item"><span id="hours">00</span><label>Hours</label></div>
+                <div class="countdown-item"><span id="minutes">00</span><label>Minutes</label></div>
+                <div class="countdown-item"><span id="seconds">00</span><label>Seconds</label></div>
             </div>
 
-            <!-- Previous Leaderboard Button Below Countdown -->
-            <button id="showPrevLeaderboardBtn">Previous Leaderboard</button>
+            <!-- Centered Previous Leaderboard Button -->
+            <div id="prevBtnContainer">
+              <button id="showPrevLeaderboardBtn">Previous Leaderboard</button>
+            </div>
         </div>
 
         <!-- Top 3 Winners -->
@@ -171,53 +181,29 @@
             </div>
             <div class="winner-card silver">
                 <div class="place-badge">2</div>
-                <div class="medal">
-                    <img src="/assets/silver.png" alt="wild medal" />
-                </div>
+                <div class="medal"><img src="/assets/silver.png" alt="wild medal" /></div>
                 <h3 class="username" id="winner-2-username"></h3>
                 <div class="stats">
-                    <div class="wagered">
-                        <span class="label">Wagered</span>
-                        <span class="value" id="winner-2-wagered"></span>
-                    </div>
-                    <div class="prize">
-                        <span class="label">Prize</span>
-                        <span class="value" id="winner-2-prize"></span>
-                    </div>
+                    <div class="wagered"><span class="label">Wagered</span><span class="value" id="winner-2-wagered"></span></div>
+                    <div class="prize"><span class="label">Prize</span><span class="value" id="winner-2-prize"></span></div>
                 </div>
             </div>
             <div class="winner-card gold">
                 <div class="place-badge">1</div>
-                <div class="medal">
-                    <img src="/assets/gold.png" alt="golden medal" />
-                </div>
+                <div class="medal"><img src="/assets/gold.png" alt="golden medal" /></div>
                 <h3 class="username" id="winner-1-username"></h3>
                 <div class="stats">
-                    <div class="wagered">
-                        <span class="label">Wagered</span>
-                        <span class="value" id="winner-1-wagered"></span>
-                    </div>
-                    <div class="prize">
-                        <span class="label">Prize</span>
-                        <span class="value" id="winner-1-prize"></span>
-                    </div>
+                    <div class="wagered"><span class="label">Wagered</span><span class="value" id="winner-1-wagered"></span></div>
+                    <div class="prize"><span class="label">Prize</span><span class="value" id="winner-1-prize"></span></div>
                 </div>
             </div>
             <div class="winner-card bronze">
                 <div class="place-badge">3</div>
-                <div class="medal">
-                    <img src="/assets/bronze.png" alt="bronze medal" />
-                </div>
+                <div class="medal"><img src="/assets/bronze.png" alt="bronze medal" /></div>
                 <h3 class="username" id="winner-3-username"></h3>
                 <div class="stats">
-                    <div class="wagered">
-                        <span class="label">Wagered</span>
-                        <span class="value" id="winner-3-wagered"></span>
-                    </div>
-                    <div class="prize">
-                        <span class="label">Prize</span>
-                        <span class="value" id="winner-3-prize"></span>
-                    </div>
+                    <div class="wagered"><span class="label">Wagered</span><span class="value" id="winner-3-wagered"></span></div>
+                    <div class="prize"><span class="label">Prize</span><span class="value" id="winner-3-prize"></span></div>
                 </div>
             </div>
         </div>
@@ -240,20 +226,55 @@
 
     <!-- Previous Leaderboard Modal -->
     <div id="prevLeaderboardModal" class="modal">
-      <div class="modal-content">
+      <div class="modal-content leaderboard-section">
         <span class="close-btn" id="modalCloseBtn">&times;</span>
-        <h3>Previous Leaderboard</h3>
-        <div class="modal-leaderboard-top3">
-          <div><strong>1.</strong> <span id="prev-winner-1-name"></span> - <span id="prev-winner-1-wager"></span> - <span id="prev-winner-1-prize"></span></div>
-          <div><strong>2.</strong> <span id="prev-winner-2-name"></span> - <span id="prev-winner-2-wager"></span> - <span id="prev-winner-2-prize"></span></div>
-          <div><strong>3.</strong> <span id="prev-winner-3-name"></span> - <span id="prev-winner-3-wager"></span> - <span id="prev-winner-3-prize"></span></div>
+        <h2 class="bonus-title" style="text-align:center; margin-bottom: 1rem;">
+          <span style="color: var(--primary-blue)">Previous Leaderboard</span>
+        </h2>
+
+        <!-- Top 3 Winners styled same as main page -->
+        <div class="top-winners">
+          <div class="floating-images"></div> <!-- hidden in modal -->
+          <div class="winner-card silver">
+            <div class="place-badge">2</div>
+            <div class="medal"><img src="/assets/silver.png" alt="silver medal" /></div>
+            <h3 class="username" id="prev-winner-2-name"></h3>
+            <div class="stats">
+              <div class="wagered"><span class="label">Wagered</span><span class="value" id="prev-winner-2-wager"></span></div>
+              <div class="prize"><span class="label">Prize</span><span class="value" id="prev-winner-2-prize"></span></div>
+            </div>
+          </div>
+
+          <div class="winner-card gold">
+            <div class="place-badge">1</div>
+            <div class="medal"><img src="/assets/gold.png" alt="gold medal" /></div>
+            <h3 class="username" id="prev-winner-1-name"></h3>
+            <div class="stats">
+              <div class="wagered"><span class="label">Wagered</span><span class="value" id="prev-winner-1-wager"></span></div>
+              <div class="prize"><span class="label">Prize</span><span class="value" id="prev-winner-1-prize"></span></div>
+            </div>
+          </div>
+
+          <div class="winner-card bronze">
+            <div class="place-badge">3</div>
+            <div class="medal"><img src="/assets/bronze.png" alt="bronze medal" /></div>
+            <h3 class="username" id="prev-winner-3-name"></h3>
+            <div class="stats">
+              <div class="wagered"><span class="label">Wagered</span><span class="value" id="prev-winner-3-wager"></span></div>
+              <div class="prize"><span class="label">Prize</span><span class="value" id="prev-winner-3-prize"></span></div>
+            </div>
+          </div>
         </div>
-        <table class="modal-leaderboard-table">
-          <thead>
-            <tr><th>Rank</th><th>Username</th><th>Wagered</th><th>Prize</th></tr>
-          </thead>
-          <tbody id="prevLeaderboardTableBody"></tbody>
-        </table>
+
+        <!-- Leaderboard Table -->
+        <div class="leaderboard-table-container">
+          <table class="leaderboard-table">
+            <thead>
+              <tr><th>Rank</th><th>Username</th><th>Wagered</th><th>Prize</th></tr>
+            </thead>
+            <tbody id="prevLeaderboardTableBody"></tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -332,7 +353,6 @@
           }
         }, 1000);
       }
-
       // Fetch current leaderboard and countdown data
       async function fetchLeaderboardData() {
         try {
@@ -357,7 +377,6 @@
           return null;
         }
       }
-
       // Update the leaderboard display
       function updateLeaderboard(leaderboardData, prizes) {
         function findPrize(pos) {
@@ -387,7 +406,6 @@
           }
         }
       }
-
       // Initialize and update periodically
       async function initializeAndUpdate() {
         const data = await fetchLeaderboardData();
@@ -404,7 +422,6 @@
           }
         }, 60000);
       }
-
       // Previous leaderboard modal functionality
       document.addEventListener('DOMContentLoaded', () => {
         initializeAndUpdate();
